@@ -28,21 +28,31 @@ public class GameManager : MonoBehaviour {
             // 씬에 두개 이상의 GameManager 오브젝트가 존재한다는 의미.
             // 싱글톤 오브젝트는 하나만 존재해야 하므로 자신의 게임 오브젝트를 파괴
             Debug.LogWarning("씬에 두개 이상의 게임 매니저가 존재합니다!");
-            Destroy(gameObject);
+            Destroy(gameObject); 
         }
     }
 
     void Update() {
         // 게임 오버 상태에서 게임을 재시작할 수 있게 하는 처리
+        if (isGameover && Input.GetMouseButton(0))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     // 점수를 증가시키는 메서드
     public void AddScore(int newScore) {
-        
+        if (!isGameover)
+        {
+            score += newScore;
+            scoreText.text = "Score : " + score;
+        }
     }
 
     // 플레이어 캐릭터가 사망시 게임 오버를 실행하는 메서드
-    public void OnPlayerDead() {
-        
+    public void OnPlayerDead()
+    {
+        isGameover = true;
+        gameoverUI.SetActive(true);
     }
 }
